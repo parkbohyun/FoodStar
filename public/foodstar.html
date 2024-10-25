@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MORAN MEDAI</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/foodStar.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <header id = "header">
+        <img src="image/header.png" alt="MORAN Logo">
+    </header>
+
+    <nav id = "nav">
+        <ul>
+            <li><a href="index.html">홈</a></li>
+            <li><a href="foodstar.html">별점</a></li>
+        </ul>
+    </nav>
+
+    <div class="foodStar">
+        <div class="container">
+            <h1>식당 한줄 리뷰 및 별점</h1>
+            <form id="reviewForm">
+                <label for="restaurantName">식당 이름:</label>
+                <input type="text" id="restaurantName" placeholder="식당 이름을 입력하세요" required>
+    
+                <label for="reviewText">한줄 리뷰:</label>
+                <input type="text" id="reviewText" placeholder="한줄 리뷰를 입력하세요" required>
+                
+                <label for="rating">별점:</label>
+                <div class="star-rating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <input type="hidden" id="rating" value="0">
+                
+                <button type="submit">리뷰 등록</button>
+            </form>
+            
+            <h2>리뷰 목록</h2>
+            <ul id="reviewList"></ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright &copy; 2024 D-HUB CORPS. All rights reserved.</p>
+    </footer>
+
+    <script src="script/foodstar.js"></script>
+</body>
+</html>
