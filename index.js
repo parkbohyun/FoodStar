@@ -25,31 +25,53 @@ if (!fs.existsSync(reviewFolder)) {
     fs.mkdirSync(reviewFolder);
 }
 
-// 리뷰 저장 엔드포인트 (한국어 식당 이름 지원)
+// 하드코딩된 비밀번호
+const PASSWORD = "0511";
+
+// 리뷰 저장 엔드포인트 (비밀번호 확인)
 app.post('/save-review', (req, res) => {
-    const { restaurant, review, rating } = req.body;
+    const { password, restaurant, review, rating } = req.body;
+
+    if (password !== PASSWORD) {
+        return res.status(403).json({ message: '비밀번호가 틀렸습니다.' });
+    }
 
     if (!restaurant || !review || !rating) {
         return res.status(400).json({ message: '모든 필드를 입력해 주세요.' });
     }
 
-    // 파일 이름을 URL-safe 형식으로 설정 (한국어 지원)
     const fileName = `${encodeURIComponent(restaurant)}.json`;
     const filePath = path.join(reviewFolder, fileName);
 
-    // 기존 파일이 존재하면 로드하고, 없으면 빈 배열로 초기화
     let reviews = [];
     if (fs.existsSync(filePath)) {
         reviews = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     }
 
-    // 새로운 리뷰 추가
     reviews.push({ review, rating });
-
-    // JSON 파일로 저장
     fs.writeFileSync(filePath, JSON.stringify(reviews, null, 2));
-
     res.json({ message: '리뷰가 저장되었습니다.' });
+});
+
+// 리뷰 삭제 엔드포인트 (비밀번호 확인)
+app.delete('/delete-review', (req, res) => {
+    const { password, restaurant, reviewText } = req.body;
+
+    if (password !== PASSWORD) {
+        return res.status(403).json({ message: '비밀번호가 틀렸습니다.' });
+    }
+
+    const fileName = `${encodeURIComponent(restaurant)}.json`;
+    const filePath = path.join(reviewFolder, fileName);
+
+    if (fs.existsSync(filePath)) {
+        let reviews = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        reviews = reviews.filter(review => review.review !== reviewText);
+        fs.writeFileSync(filePath, JSON.stringify(reviews, null, 2));
+        res.json({ message: '리뷰가 삭제되었습니다.' });
+    } else {
+        res.status(404).json({ message: '해당 리뷰가 없습니다.' });
+    }
 });
 
 // 모든 리뷰 불러오기 (한국어 식당 이름 처리)
